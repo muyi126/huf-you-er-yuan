@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back002"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/id"
+        android:layout_width="280dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dip"
+        android:background="@drawable/id"
+        android:enabled="false"
+        android:gravity="right|center_vertical"
+        android:paddingLeft="100dip"
+        android:paddingRight="20dip"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/z_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="120dip"
+        android:textColor="@color/font_white"
+        android:textSize="25px"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/score"
+        android:layout_width="280dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/jifen"
+        android:enabled="false"
+        android:gravity="right|center_vertical"
+        android:inputType="number"
+        android:paddingLeft="100dip"
+        android:paddingRight="20dip"
+        android:singleLine="true" />
+
+    <Button
+        android:id="@+id/duihuan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dip"
+        android:background="@drawable/m_duihuan" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/queren"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dip"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/queren_button" />
+
+        <Button
+            android:id="@+id/cexiao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/chexiao" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="45dip"
+        android:layout_height="45dip"
+        android:layout_gravity="right"
+        android:layout_marginRight="50dip"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/fanhui"
+        android:visibility="visible" />
+
+</LinearLayout>
