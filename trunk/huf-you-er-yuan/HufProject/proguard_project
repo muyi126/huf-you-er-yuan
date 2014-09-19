@@ -1,0 +1,120 @@
+-optimizationpasses 5
+
+-dontusemixedcaseclassnames
+
+-dontskipnonpubliclibraryclasses
+
+-dontpreverify
+
+-keepattributes Signature
+
+-verbose
+
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+
+-keepattributes *Annotation*
+
+-ignorewarning
+
+-keepattributes JavascriptInterface
+-keep public class * extends android.app.Activity
+-keep public class * extends android.widget.BaseAdapter
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+-keep public class com.android.vending.licensing.ILicensingService
+-keep public class com.givon.gamecenter.Entity.** { *; }
+-keep public class java.util.** { *; }
+
+-keep public class * extends android.view.View {
+public <init>(android.content.Context);
+public <init>(android.content.Context, android.util.AttributeSet);
+public <init>(android.content.Context, android.util.AttributeSet, int);
+public void set*(...);
+public void get*(...);
+}
+
+-keepclasseswithmembernames class * {    native <methods>;}
+
+-keepclasseswithmembers class * {    public <init>(android.content.Context, android.util.AttributeSet);}
+
+-keepclasseswithmembers class * {    public <init>(android.content.Context, android.util.AttributeSet, int);}
+
+-keepclassmembers class * extends android.app.Activity {   public void *(android.view.View);}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
+}
+
+-keepclassmembers class * implements android.os.Parcelable {
+static android.os.Parcelable$Creator CREATOR;
+}
+
+-keepclassmembers class **.R$* {
+public static <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+##-keepnames class * implements java.io.Serializable
+
+-keep public class * implements java.io.Serializable { public *;}
+
+-keepclassmembers public class * implements java.io.Serializable {
+
+    static final long serialVersionUID;
+
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+
+    private void writeObject(java.io.ObjectOutputStream);
+
+    private void readObject(java.io.ObjectInputStream);
+
+    java.lang.Object writeReplace();
+
+    java.lang.Object readResolve();
+
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+
+-dontwarn android.support.**
+-dontwarn com.alibaba.fastjson.**
+-keep class com.alibaba.fastjson.** { *; }
+
+-dontwarn com.lidroid.xutils.**
+-libraryjars libs/xutils_library.jar
+-keep class com.lidroid.xutils.** { *; } 
+
+-dontwarn com.j256.ormlite.**
+-libraryjars libs/ormlite-android-4.48.jar
+-libraryjars libs/ormlite-core-4.48.jar
+-keep class com.j256.ormlite.** {*; } 
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
+}
+
+
+-dontwarn com.wpx.**
+-dontwarn com.cilico.**
+-libraryjars libs/scansound.jar
+-libraryjars libs/UHF_20130114.jar
+-keep class com.cilico.** { *; } 
+-keep class com.wpx.** { *; } 
+-keep class com.givon.huf.entity.** { *; } 
+
+##-keepclasseswithmembers public class * extends android.widget.BaseAdapter { public * ; }
+
