@@ -2,63 +2,79 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back001"
+    android:background="@drawable/start_bg"
     android:orientation="vertical" >
-    
-    
-    <TextView 
+
+    <TextView
         android:id="@+id/biaoji"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        />
-    
-    <Button 
-        android:id="@+id/kaishi"
-        android:layout_below="@id/biaoji"
-        android:layout_marginTop="20dip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/kaishi_button"
-        />
-    <Button 
-        android:id="@+id/jilu"
-        android:layout_below="@id/kaishi"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="20dip"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/julu_button"
-        />
-    
-    <TextView 
+        android:layout_centerInParent="true" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dip"
+        android:background="@color/font_white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dip"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/kaishi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="30dip"
+            android:layout_marginLeft="15dip"
+            android:layout_marginTop="30dip"
+            android:scaleType="centerInside"
+            android:src="@drawable/kaishi" />
+
+        <View
+            android:layout_width="1sp"
+            android:layout_height="match_parent"
+            android:background="@color/font_blue_q" />
+
+        <ImageView
+            android:id="@+id/jilu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="30dip"
+            android:layout_marginLeft="15dip"
+            android:layout_marginTop="30dip"
+            android:scaleType="centerInside"
+            android:src="@drawable/jilu" />
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/tv_Version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/font_black"
-        android:textSize="14px"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="5dip"
-        />
-    <TextView 
+        android:textColor="@color/font_black"
+        android:textSize="14px" />
+
+    <TextView
         android:id="@+id/tv_Status"
-        android:layout_above="@+id/tv_Version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/font_black"
-        android:layout_marginRight="5dip"
-        android:textSize="14px"
+        android:layout_above="@+id/tv_Version"
         android:layout_alignParentRight="true"
-        />
-    <ProgressBar   
-        android:id="@+id/progress_bar"   
-        android:layout_width="fill_parent"   
-        android:layout_height="wrap_content"   
-        android:progress="0"  
-        android:max="100"  
-        android:visibility="gone"
-        style="?android:attr/progressBarStyleHorizontal"/>  
+        android:layout_marginRight="5dip"
+        android:textColor="@color/font_black"
+        android:textSize="14px" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0"
+        android:visibility="gone" />
 
 </RelativeLayout>

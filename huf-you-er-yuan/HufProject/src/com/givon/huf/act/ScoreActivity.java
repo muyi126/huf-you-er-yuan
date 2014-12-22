@@ -13,12 +13,16 @@ package com.givon.huf.act;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.givon.huf.BaseActivity;
@@ -46,12 +50,14 @@ public class ScoreActivity extends BaseActivity {
 	public IUHFService uhfService = new UHFServiceImpl();
 	private String mTitle;
 	private int Tag;
-	private TextView et_IdEditText;
-	private EditText et_ScoreEditText;
+	// private TextView et_IdEditText;
+	// private EditText et_ScoreEditText;
 	private TextView tv_Title;
-	private Button bt_50;
-	private Button bt_100;
+	private ImageView bt_50;
+	private ImageView bt_100;
+	private ImageView iv_stopScore;
 	private threadScan tScan;
+	private threadWrite tWrite;
 	private Button bt_queren;
 	private Button bt_cexiao;
 	private Button bt_back;
@@ -61,9 +67,15 @@ public class ScoreActivity extends BaseActivity {
 	private DbHelper dbHelper;
 	private int SelectData;
 	private boolean isEdit = true;
-	private TextView z_Score;
+	// private TextView z_Score;
+	private TextView tv_id;
+	private TextView tv_zf_score;
 	private String idString;
 	private int tatol_size = 7;
+	private LinearLayout ly_top;
+	private boolean isScanIng = false;
+	private boolean isWriting = false;
+	private boolean isStop = false;
 
 	protected void onCreate(android.os.Bundle arg0) {
 		super.onCreate(arg0);
@@ -74,76 +86,104 @@ public class ScoreActivity extends BaseActivity {
 		}
 		if (intent.hasExtra("Title")) {
 			mTitle = intent.getStringExtra("Title");
+			System.out.println("Title:" + mTitle);
 		}
-		// if (intent.hasExtra("data")) {
-		// mEntity = (TagEntity) intent.getSerializableExtra("data");
-		// }
 		initView();
 	};
 
+	@SuppressLint("NewApi")
 	private void initView() {
+
 		listener = new ThisListener();
-		et_IdEditText = (TextView) findViewById(R.id.id);
-		et_ScoreEditText = (EditText) findViewById(R.id.score);
-		tv_Title = (TextView) findViewById(R.id.title);
-		if (!StringUtil.isEmpty(mTitle)) {
-			tv_Title.setText(mTitle);
-		}
-		bt_100 = (Button) findViewById(R.id.bt_100);
-		bt_50 = (Button) findViewById(R.id.bt_50);
-		bt_queren = (Button) findViewById(R.id.queren);
-		bt_cexiao = (Button) findViewById(R.id.cexiao);
+		// et_IdEditText = (TextView) findViewById(R.id.id);
+		// et_ScoreEditText = (EditText) findViewById(R.id.score);
+		// tv_Title = (TextView) findViewById(R.id.title);
+		// if (!StringUtil.isEmpty(mTitle)) {
+		// tv_Title.setText(mTitle);
+		// }
+		tv_id = (TextView) findViewById(R.id.tv_id);
+		tv_zf_score = (TextView) findViewById(R.id.tv_zf_score);
+		bt_100 = (ImageView) findViewById(R.id.iv_100);
+		bt_50 = (ImageView) findViewById(R.id.iv_50);
+		iv_stopScore = (ImageView) findViewById(R.id.iv_stopScore);
+		iv_stopScore.setVisibility(View.GONE);
+		iv_stopScore.setOnClickListener(listener);
+		// bt_queren = (Button) findViewById(R.id.queren);
+		// bt_cexiao = (Button) findViewById(R.id.cexiao);
 		bt_back = (Button) findViewById(R.id.back);
 		bt_100.setOnClickListener(listener);
 		bt_50.setOnClickListener(listener);
-		bt_queren.setOnClickListener(listener);
-		bt_cexiao.setOnClickListener(listener);
+		// bt_queren.setOnClickListener(listener);
+		// bt_cexiao.setOnClickListener(listener);
 		bt_back.setOnClickListener(listener);
 		dbHelper = new DbHelper(this);
-		z_Score = (TextView) findViewById(R.id.z_score);
+		// z_Score = (TextView) findViewById(R.id.z_score);
+
+		ly_top = (LinearLayout) findViewById(R.id.ly_top);
+		switch (Tag) {
+		case TAG_A:
+			ly_top.setBackgroundResource(R.drawable.cy_t_bg);
+			break;
+		case TAG_B:
+			ly_top.setBackgroundResource(R.drawable.jj_t_bg);
+			break;
+		case TAG_C:
+			ly_top.setBackgroundResource(R.drawable.jj_t_bg);
+			break;
+		case TAG_D:
+			ly_top.setBackgroundResource(R.drawable.cy_t_bg);
+			break;
+		case TAG_E:
+			ly_top.setBackgroundResource(R.drawable.cy_t_bg);
+			break;
+
+		default:
+			break;
+		}
+
 		initData();
 
 	}
 
 	private void initData() {
 		if (null != mEntity) {
-			et_IdEditText.setText(mEntity.getId());
-		}else {
-			et_IdEditText.setText("");
-			et_ScoreEditText.setText(0+"");
-			SelectData =0;
+			tv_id.setText(mEntity.getId());
+		} else {
+			tv_id.setText("");
+			tv_zf_score.setText(0 + "");
+			// SelectData = 0;
 		}
 		if (null != mEntity) {
 			switch (Tag) {
 			case TAG_A:
-				et_ScoreEditText.setText(mEntity.getA_score() + "");
-				SelectData = mEntity.getA_score();
+				tv_zf_score.setText(mEntity.getA_score() + "");
+				// SelectData = mEntity.getA_score();
 				break;
 			case TAG_B:
-				et_ScoreEditText.setText(mEntity.getB_score() + "");
-				SelectData = mEntity.getB_score();
+				tv_zf_score.setText(mEntity.getB_score() + "");
+				// SelectData = mEntity.getB_score();
 				break;
 			case TAG_C:
-				et_ScoreEditText.setText(mEntity.getC_score() + "");
-				SelectData = mEntity.getC_score();
+				tv_zf_score.setText(mEntity.getC_score() + "");
+				// SelectData = mEntity.getC_score();
 
 				break;
 			case TAG_D:
-				et_ScoreEditText.setText(mEntity.getD_score() + "");
-				SelectData = mEntity.getD_score();
+				tv_zf_score.setText(mEntity.getD_score() + "");
+				// SelectData = mEntity.getD_score();
 
 				break;
 			case TAG_E:
-				et_ScoreEditText.setText(mEntity.getE_score() + "");
-				SelectData = mEntity.getE_score();
+				tv_zf_score.setText(mEntity.getE_score() + "");
+				// SelectData = mEntity.getE_score();
 
 				break;
 
 			default:
 				break;
 			}
-			z_Score.setText("总分:" + mEntity.getTotal_score());
-			et_ScoreEditText.setText("" + SelectData);
+			tv_zf_score.setText("总分:" + mEntity.getTotal_score());
+			// tv_zf_score.setText("" + SelectData);
 		}
 
 		if (SelectData == 0) {
@@ -168,57 +208,89 @@ public class ScoreActivity extends BaseActivity {
 				mNewEntity.setTotal_score(mEntity.getTotal_score());
 			}
 			switch (v.getId()) {
-			case R.id.bt_100:
-				if (null == mEntity) {
-					scanAction();
-				} else {
-					SelectData = 100;
-					et_ScoreEditText.setText("100");
-					setEntity(Tag, mNewEntity, 100);
-				}
+			case R.id.iv_100:
+				bt_100.setVisibility(View.VISIBLE);
+				bt_50.setVisibility(View.GONE);
+				SelectData = 100;
+				iv_stopScore.setVisibility(View.VISIBLE);
+				scanAction();
 				break;
-			case R.id.bt_50:
-				if (null == mEntity) {
-					scanAction();
-				} else {
-					SelectData = 50;
-					et_ScoreEditText.setText("50");
-					setEntity(Tag, mNewEntity, 50);
-				}
+			case R.id.iv_50:
+				bt_50.setVisibility(View.VISIBLE);
+				bt_100.setVisibility(View.GONE);
+				SelectData = 50;
+				iv_stopScore.setVisibility(View.VISIBLE);
+				scanAction();
 				break;
-			case R.id.queren:
-				if (isEdit) {
-					showWaitingDialog();
-					if(SelectData==0){
-						ToastUtil.showMessage("打分为零");
-						return;
-					}
-					setEntity(Tag, mNewEntity, SelectData);
-					new threadWrite().execute(SelectData, mNewEntity.getTotal_score());
-				} else {
-					ToastUtil.showMessage("请勿重复打分");
-				}
-				break;
-			case R.id.cexiao:
-				if (!isEdit) {
-					setEntity(Tag, mNewEntity, 0);
-					if (mNewEntity.getTotal_score() - mNewEntity.getExpend_score() < 0) {
-						ToastUtil.showMessage("积分已经兑换不能撤销");
-					} else {
-						showWaitingDialog();
-						new threadCexiao().execute(0, mNewEntity.getTotal_score());
-					}
-				} else {
-					ToastUtil.showMessage("没有打分");
-				}
+			case R.id.iv_stopScore:
+				bt_50.setVisibility(View.VISIBLE);
+				bt_100.setVisibility(View.VISIBLE);
+				SelectData = 0;
+				// 停止搜索
+				isStop = true;
+				iv_stopScore.setVisibility(View.GONE);
 				break;
 			case R.id.back:
+				// 停止搜索
+				isStop = true;
 				finish();
 				break;
 
 			default:
 				break;
 			}
+			// switch (v.getId()) {
+			// case R.id.bt_100:
+			// if (null == mEntity) {
+			// scanAction();
+			// } else {
+			// SelectData = 100;
+			// et_ScoreEditText.setText("100");
+			// setEntity(Tag, mNewEntity, 100);
+			// }
+			// break;
+			// case R.id.bt_50:
+			// if (null == mEntity) {
+			// scanAction();
+			// } else {
+			// SelectData = 50;
+			// et_ScoreEditText.setText("50");
+			// setEntity(Tag, mNewEntity, 50);
+			// }
+			// break;
+			// case R.id.queren:
+			// if (isEdit) {
+			// showWaitingDialog();
+			// if (SelectData == 0) {
+			// ToastUtil.showMessage("打分为零");
+			// return;
+			// }
+			// setEntity(Tag, mNewEntity, SelectData);
+			// new threadWrite().execute(SelectData, mNewEntity.getTotal_score());
+			// } else {
+			// ToastUtil.showMessage("请勿重复打分");
+			// }
+			// break;
+			// case R.id.cexiao:
+			// if (!isEdit) {
+			// setEntity(Tag, mNewEntity, 0);
+			// if (mNewEntity.getTotal_score() - mNewEntity.getExpend_score() < 0) {
+			// ToastUtil.showMessage("积分已经兑换不能撤销");
+			// } else {
+			// showWaitingDialog();
+			// new threadCexiao().execute(0, mNewEntity.getTotal_score());
+			// }
+			// } else {
+			// ToastUtil.showMessage("没有打分");
+			// }
+			// break;
+			// case R.id.back:
+			// finish();
+			// break;
+			//
+			// default:
+			// break;
+			// }
 
 		}
 
@@ -253,10 +325,36 @@ public class ScoreActivity extends BaseActivity {
 	}
 
 	private void scanAction() {
-		tScan = new threadScan();
-		tScan.execute();
-		bt_50.setEnabled(false);
-		bt_100.setEnabled(false);
+		if (!isScanIng && !isStop) {
+			tScan = new threadScan();
+			tScan.execute();
+		}
+		// bt_50.setEnabled(false);
+		// bt_100.setEnabled(false);
+	}
+
+	private void writeAction() {
+		mNewEntity = new TagEntity();
+		if (null != mEntity) {
+			mNewEntity.setA_score(mEntity.getA_score());
+			mNewEntity.setB_score(mEntity.getB_score());
+			mNewEntity.setC_score(mEntity.getC_score());
+			mNewEntity.setD_score(mEntity.getD_score());
+			mNewEntity.setE_score(mEntity.getE_score());
+			mNewEntity.setExpend_score(mEntity.getExpend_score());
+			mNewEntity.setTotal_score(mEntity.getTotal_score());
+		}
+		if (!isWriting && !isStop) {
+			if (SelectData == 0) {
+				ToastUtil.showMessage("打分为零");
+				return;
+			}
+			setEntity(Tag, mNewEntity, SelectData);
+			tWrite = new threadWrite();
+			tWrite.execute(SelectData, mNewEntity.getTotal_score());
+		}
+		// bt_50.setEnabled(false);
+		// bt_100.setEnabled(false);
 	}
 
 	class threadWrite extends AsyncTask<Integer, String, Integer> {
@@ -277,8 +375,9 @@ public class ScoreActivity extends BaseActivity {
 
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
 			super.onPreExecute();
+			showWaitingDialog();
+			isWriting = true;
 		}
 
 		@Override
@@ -298,9 +397,17 @@ public class ScoreActivity extends BaseActivity {
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
-						mEntity=null;
+						mEntity = null;
+						PlaySoundUtil.play();
 						initData();
-						showDialogMessage("数据设置成功");
+						showDialogMessage("数据设置成功", new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.cancel();
+								scanAction();
+							}
+						});
 					} else {
 						ToastUtil.showMessage("Write user data faild : " + resultInfo.getResult());
 					}
@@ -308,6 +415,7 @@ public class ScoreActivity extends BaseActivity {
 					ToastUtil.showMessage(resultInfo.getErrInfo());
 				}
 			}
+			isWriting = false;
 		}
 	}
 
@@ -321,7 +429,7 @@ public class ScoreActivity extends BaseActivity {
 			block_Data = StringUtil.int2String4(params[0]);
 			z = StringUtil.int2String4(params[1]);
 			resultInfo = uhfService.writeUser(Tag, Password, block_Data);
-			System.out.println("zzzz:"+z);
+			System.out.println("zzzz:" + z);
 			resultInfo = uhfService.writeUser(5, Password, z);
 			return 0;
 		}
@@ -372,12 +480,16 @@ public class ScoreActivity extends BaseActivity {
 
 		// @Override
 		protected void onPreExecute() {
-//			ToastUtil.showMessage("Scaning.....");
+			isScanIng = true;
+			// ToastUtil.showMessage("Scaning.....");
 		}
 
 		// @Override
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
+			if (isStop) {
+				return;
+			}
 			if (resultInfo != null) {
 				if (resultInfo.getResult() == 0) {
 					resultInfo.getValues();
@@ -387,17 +499,20 @@ public class ScoreActivity extends BaseActivity {
 						idString = resultInfo.getValues().get(0);
 						new threadRead().execute();
 					} else {
+						isScanIng = false;
 						bt_50.setEnabled(true);
 						bt_100.setEnabled(true);
 					}
-//					ToastUtil.showMessage("Tag is found " + resultInfo.getValues().size());
+					// ToastUtil.showMessage("Tag is found " + resultInfo.getValues().size());
 				} else {
+					isScanIng = false;
 					bt_50.setEnabled(true);
 					bt_100.setEnabled(true);
 					ToastUtil.showMessage("Search tag is failed : " + resultInfo.getResult());
 
 				}
 			} else {
+				isScanIng = false;
 				bt_50.setEnabled(true);
 				bt_100.setEnabled(true);
 			}
@@ -424,7 +539,7 @@ public class ScoreActivity extends BaseActivity {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
-//			ToastUtil.showMessage("Read user data ....");
+			// ToastUtil.showMessage("Read user data ....");
 		}
 
 		@Override
@@ -441,7 +556,7 @@ public class ScoreActivity extends BaseActivity {
 						if (resultInfo.getResult() == 0) {
 
 							mEntity = setTagEntity(i, resultInfo.getResultValue(), mEntity);
-							System.out.println("mEntity:"+i+" "+resultInfo.getResultValue());
+							System.out.println("mEntity:" + i + " " + resultInfo.getResultValue());
 						} else {
 							isSuccess = false;
 
@@ -454,7 +569,7 @@ public class ScoreActivity extends BaseActivity {
 				if (isSuccess) {
 					if (null != mEntity) {
 						try {
-//							mEntity = setEntity(Tag, mEntity, SelectData);
+							// mEntity = setEntity(Tag, mEntity, SelectData);
 							Dao<TagEntity, Integer> tagdao = dbHelper.getTagDao();
 							tagdao.createOrUpdate(mEntity);
 							initData();
@@ -462,13 +577,16 @@ public class ScoreActivity extends BaseActivity {
 							// Intent intent = new Intent(MainActivity.this, MenuActivity.class);
 							// intent.putExtra("id", mEntity.getId());
 							// startActivity(intent);
+							writeAction();
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 
 					}
+					isScanIng = false;
 				} else {
+					isScanIng = false;
 					ToastUtil.showMessage("读取失败");
 				}
 			}
@@ -512,6 +630,20 @@ public class ScoreActivity extends BaseActivity {
 			break;
 		}
 		return tag;
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (!isStop) {
+			bt_50.setVisibility(View.VISIBLE);
+			bt_100.setVisibility(View.VISIBLE);
+			SelectData = 0;
+			// 停止搜索
+			isStop = true;
+			iv_stopScore.setVisibility(View.GONE);
+		}else {
+			super.onBackPressed();
+		}
 	}
 
 }

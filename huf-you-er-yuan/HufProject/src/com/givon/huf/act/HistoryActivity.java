@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,8 +34,8 @@ public class HistoryActivity extends BaseListActivity<TagEntity> {
 	private DbHelper dbHelper;
 	private List<TagEntity> list;
 	private int page_size = 7;
-	private Button bt_PriButton;
-	private Button bt_NextButton;
+	private ImageView bt_PriButton;
+	private ImageView bt_NextButton;
 	private int total_size;
 	private TextView tv_Total_pople;
 	private ListView mListView;
@@ -53,8 +54,8 @@ public class HistoryActivity extends BaseListActivity<TagEntity> {
 		dbHelper = new DbHelper(this);
 		// mListView.setPullLoadEnable(false);
 		// mListView.setPullRefreshEnable(false);
-		bt_PriButton = (Button) findViewById(R.id.pri);
-		bt_NextButton = (Button) findViewById(R.id.next);
+		bt_PriButton = (ImageView) findViewById(R.id.pri);
+		bt_NextButton = (ImageView) findViewById(R.id.next);
 		bt_NextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

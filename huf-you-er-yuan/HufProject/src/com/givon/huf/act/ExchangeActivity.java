@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,11 +40,11 @@ import com.wpx.service.IUHFService;
 import com.wpx.service.impl.UHFServiceImpl;
 
 public class ExchangeActivity extends BaseActivity {
-	private EditText et_IdEditText;
-	private EditText et_ScoreEditText;
-	private Button bt_queren;
-	private Button bt_cexiao;
-	private Button bt_duihuan;
+	private TextView tv_id;
+	private TextView tv_zf_score;
+	private ImageView iv_sure;
+	private ImageView iv_chexiao;
+	// private Button bt_duihuan;
 	private Button bt_back;
 	private ThisListener listener;
 	private String SelectData;
@@ -54,10 +55,11 @@ public class ExchangeActivity extends BaseActivity {
 	public IUHFService uhfService = new UHFServiceImpl();
 	private String Password = "00000000";
 	private int mShengyu;
-	private TextView tv_Z_Score;
 	private String idString;
 	private int tatol_size = 7;
+	private ImageView iv_checkimg;
 	private threadScan tScan;
+	private boolean isCheckd = false;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -79,41 +81,74 @@ public class ExchangeActivity extends BaseActivity {
 
 	private void initView() {
 		listener = new ThisListener();
-		et_IdEditText = (EditText) findViewById(R.id.id);
-		et_ScoreEditText = (EditText) findViewById(R.id.score);
-		et_ScoreEditText.setText("0");
-		bt_queren = (Button) findViewById(R.id.queren);
-		bt_cexiao = (Button) findViewById(R.id.cexiao);
-		tv_Z_Score = (TextView) findViewById(R.id.z_score);
-		bt_duihuan = (Button) findViewById(R.id.duihuan);
+		tv_id = (TextView) findViewById(R.id.tv_id);
+		tv_zf_score = (TextView) findViewById(R.id.tv_zf_score);
+		tv_zf_score.setText("0");
+		iv_sure = (ImageView) findViewById(R.id.iv_sure);
+		iv_chexiao = (ImageView) findViewById(R.id.iv_chexiao);
 		bt_back = (Button) findViewById(R.id.back);
+		iv_checkimg = (ImageView) findViewById(R.id.iv_checkimg);
 		initViewData();
 
 	}
 
 	private void initViewData() {
 		if (null != mEntity) {
-			et_IdEditText.setText(mEntity.getId());
+			tv_id.setText(mEntity.getId());
 			mShengyu = mEntity.getTotal_score() - mEntity.getExpend_score();
 			// et_ScoreEditText.setText(mShengyu+"");
-			tv_Z_Score.setText("剩余积分：" + mShengyu);
-			et_ScoreEditText.addTextChangedListener(mTextWatcher);
-			bt_queren.setOnClickListener(listener);
-			bt_cexiao.setOnClickListener(listener);
-		}else {
-			et_IdEditText.setText("");
-			et_ScoreEditText.setText(""+0);
-			tv_Z_Score.setText("");
+//			tv_zf_score.setText("剩余积分：" + mShengyu);
+			tv_zf_score.setText("500");
+			// et_ScoreEditText.addTextChangedListener(mTextWatcher);
+			iv_sure.setOnClickListener(listener);
+			iv_chexiao.setOnClickListener(listener);
+		} else {
+			tv_id.setText("");
+			tv_zf_score.setText("" + 0);
 		}
+		if (isCheckd) {
+			iv_checkimg.setBackgroundResource(R.drawable.jf_light);
+		} else {
+			iv_checkimg.setBackgroundResource(R.drawable.jifen1);
+		}
+		iv_checkimg.setOnClickListener(listener);
 		bt_back.setOnClickListener(listener);
-		bt_duihuan.setOnClickListener(listener);
+		iv_sure.setOnClickListener(listener);
 
 	}
 
 	private void scanAction() {
 		tScan = new threadScan();
 		tScan.execute();
-		bt_duihuan.setEnabled(false);
+		iv_sure.setEnabled(false);
+	}
+
+	private void duihuanAction() {
+		if (!isCheckd) {
+			ToastUtil.showMessage("没有点击兑换");
+			return;
+		}
+		
+		SelectData = "500";
+		if (!StringUtil.isEmpty(SelectData)) {
+			try {
+				int duihuan = Integer.valueOf(SelectData);
+				if (duihuan > 0) {
+					if ((mEntity.getTotal_score() - mEntity.getExpend_score() - duihuan) >= 0) {
+						// duihuan = mEntity.getExpend_score() + duihuan;
+						new threadWrite().execute(duihuan);
+					} else {
+						showDialogMessage("积分不足不能兑换");
+					}
+				} else {
+					showDialogMessage("输入积分错误");
+				}
+			} catch (Exception e) {
+				showDialogMessage("输入积分错误");
+			}
+		} else {
+			showDialogMessage("兑换积分不能为空");
+		}
 	}
 
 	private class ThisListener implements OnClickListener {
@@ -122,42 +157,36 @@ public class ExchangeActivity extends BaseActivity {
 		public void onClick(View v) {
 
 			switch (v.getId()) {
-			case R.id.queren:
-				SelectData = et_ScoreEditText.getText().toString();
-				if (!StringUtil.isEmpty(SelectData)) {
-					try {
-						int duihuan = Integer.valueOf(SelectData);
-						if (duihuan > 0) {
-							if ((mEntity.getTotal_score() - mEntity.getExpend_score() - duihuan) >= 0) {
-//								duihuan = mEntity.getExpend_score() + duihuan;
-								new threadWrite().execute(duihuan);
-							} else {
-								showDialogMessage("积分不足不能兑换");
-							}
-						} else {
-							showDialogMessage("输入积分错误");
-						}
-					} catch (Exception e) {
-						showDialogMessage("输入积分错误");
-					}
-				} else {
-					showDialogMessage("兑换积分不能为空");
-				}
+			case R.id.iv_sure:
+				// SelectData = et_ScoreEditText.getText().toString();
+				duihuanAction();
 				break;
-			case R.id.cexiao:
-				et_ScoreEditText.setText("0");
+			case R.id.iv_chexiao:
+				// et_ScoreEditText.setText("0");
+				mEntity = null;
+				isCheckd =false;
+				iv_checkimg.setBackgroundResource(R.drawable.jifen1);
 				break;
 			case R.id.back:
 				finish();
 				break;
-			case R.id.duihuan:
-				if (mEntity == null) {
-					scanAction();
+			// case R.id.duihuan:
+			// if (mEntity == null) {
+			// scanAction();
+			// } else {
+			// et_ScoreEditText.setText("500");
+			// }
+			// break;
+			case R.id.iv_checkimg:
+				if (isCheckd) {
+					isCheckd = !isCheckd;
+					iv_checkimg.setBackgroundResource(R.drawable.jifen1);
 				} else {
-					et_ScoreEditText.setText("500");
+					isCheckd = !isCheckd;
+					iv_checkimg.setBackgroundResource(R.drawable.jf_light);
+					scanAction();
 				}
 				break;
-
 			default:
 				break;
 			}
@@ -195,7 +224,9 @@ public class ExchangeActivity extends BaseActivity {
 							dao = dbHelper.getTagDao();
 							dao.createOrUpdate(mEntity);
 							ToastUtil.showMessage("兑换成功");
-							mEntity =null;
+							isCheckd = false;
+							iv_checkimg.setBackgroundResource(R.drawable.jifen1);
+							mEntity = null;
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}
@@ -220,9 +251,9 @@ public class ExchangeActivity extends BaseActivity {
 			temp = s;
 			try {
 				if (mShengyu - Integer.valueOf(s.toString()) >= 0) {
-					tv_Z_Score.setText("剩余积分：" + (mShengyu - Integer.valueOf((String) s)));
+					// tv_Z_Score.setText("剩余积分：" + (mShengyu - Integer.valueOf((String) s)));
 				} else {
-					tv_Z_Score.setText("剩余积分：" + mShengyu);
+					// tv_Z_Score.setText("剩余积分：" + mShengyu);
 					ToastUtil.showMessage("积分超出兑换范围啦");
 				}
 			} catch (Exception e) {
@@ -238,14 +269,14 @@ public class ExchangeActivity extends BaseActivity {
 
 		@Override
 		public void afterTextChanged(Editable s) {
-			editStart = et_ScoreEditText.getSelectionStart();
-			editEnd = et_ScoreEditText.getSelectionEnd();
+			// editStart = et_ScoreEditText.getSelectionStart();
+			// editEnd = et_ScoreEditText.getSelectionEnd();
 			if (temp.length() > 4) {
 				Toast.makeText(ExchangeActivity.this, "你输入的字数已经超过了限制！", Toast.LENGTH_SHORT).show();
 				s.delete(editStart - 1, editEnd);
 				int tempSelection = editStart;
-				et_ScoreEditText.setText(s);
-				et_ScoreEditText.setSelection(tempSelection);
+				// et_ScoreEditText.setText(s);
+				// et_ScoreEditText.setSelection(tempSelection);
 			}
 		}
 	};
@@ -261,7 +292,7 @@ public class ExchangeActivity extends BaseActivity {
 
 		// @Override
 		protected void onPreExecute() {
-//			ToastUtil.showMessage("Scaning.....");
+			// ToastUtil.showMessage("Scaning.....");
 		}
 
 		// @Override
@@ -276,16 +307,16 @@ public class ExchangeActivity extends BaseActivity {
 						idString = resultInfo.getValues().get(0);
 						new threadRead().execute();
 					} else {
-						bt_duihuan.setEnabled(true);
+						iv_sure.setEnabled(true);
 					}
 					// ToastUtil.showMessage("Tag is found " + resultInfo.getValues().size());
 				} else {
-					bt_duihuan.setEnabled(true);
+					iv_sure.setEnabled(true);
 					ToastUtil.showMessage("Search tag is failed : " + resultInfo.getResult());
 
 				}
 			} else {
-				bt_duihuan.setEnabled(true);
+				iv_sure.setEnabled(true);
 			}
 		}
 	}
@@ -342,7 +373,7 @@ public class ExchangeActivity extends BaseActivity {
 						try {
 							Dao<TagEntity, Integer> tagdao = dbHelper.getTagDao();
 							tagdao.createOrUpdate(mEntity);
-							et_ScoreEditText.setText("500");
+							// et_ScoreEditText.setText("500");
 							initViewData();
 							// Intent intent = new Intent(MainActivity.this, MenuActivity.class);
 							// intent.putExtra("id", mEntity.getId());
@@ -358,7 +389,7 @@ public class ExchangeActivity extends BaseActivity {
 					ToastUtil.showMessage("读取失败");
 				}
 			}
-			bt_duihuan.setEnabled(true);
+			iv_sure.setEnabled(true);
 		}
 
 	}

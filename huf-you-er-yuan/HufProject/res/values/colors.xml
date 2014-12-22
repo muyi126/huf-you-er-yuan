@@ -7,4 +7,7 @@
     <color name="transparent">#00000000</color>
     <color name="font_gray">#FFBFBFBF</color>
     <color name="font_blue">#63B8FF</color>
+    <color name="font_green_q">#87C359</color>
+    <color name="font_blue_q">#4FC8EB</color>
+    <color name="font_blue_s">#00A6E2</color>
 </resources>
