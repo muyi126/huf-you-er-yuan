@@ -296,7 +296,7 @@ android.support.v4.content.IntentCompatHoneycomb
 android.support.v4.content.IntentCompatIcsMr1
 android.support.v4.content.Loader:
     android.content.Context mContext
-    38:93:public Loader(android.content.Context)
+    91:93:public Loader(android.content.Context)
     103:106:public void deliverResult(java.lang.Object)
     112:112:public android.content.Context getContext()
     119:119:public int getId()
@@ -329,7 +329,7 @@ android.support.v4.content.ModernAsyncTask:
     private final java.util.concurrent.atomic.AtomicBoolean mTaskInvoked
     106:107:public static void init()
     111:112:public static void setDefaultExecutor(java.util.concurrent.Executor)
-    81:147:public ModernAsyncTask()
+    117:147:public ModernAsyncTask()
     150:154:private void postResultIfNotInvoked(java.lang.Object)
     157:160:private java.lang.Object postResult(java.lang.Object)
     169:169:public final android.support.v4.content.ModernAsyncTask$Status getStatus()
@@ -1330,8 +1330,8 @@ android.support.v4.widget.SearchViewCompatIcs:
     47:48:public static void setImeOptions(android.view.View,int)
     51:52:public static void setInputType(android.view.View,int)
 android.support.v4.widget.SimpleCursorAdapter:
-    47:67:public SimpleCursorAdapter(android.content.Context,int,android.database.Cursor,java.lang.String[],int[])
-    47:93:public SimpleCursorAdapter(android.content.Context,int,android.database.Cursor,java.lang.String[],int[],int)
+    63:67:public SimpleCursorAdapter(android.content.Context,int,android.database.Cursor,java.lang.String[],int[])
+    89:93:public SimpleCursorAdapter(android.content.Context,int,android.database.Cursor,java.lang.String[],int[],int)
     162:162:public android.support.v4.widget.SimpleCursorAdapter$ViewBinder getViewBinder()
     175:176:public void setViewBinder(android.support.v4.widget.SimpleCursorAdapter$ViewBinder)
     228:228:public int getStringConversionColumn()
@@ -1352,8 +1352,8 @@ android.support.v4.widget.SlidingPaneLayout:
     895:895:public boolean canSlide()
     1103:1122:protected boolean canScroll(android.view.View,boolean,int,int,int)
 android.support.v4.widget.SlidingPaneLayout$LayoutParams:
-    1257:1278:public SlidingPaneLayout$LayoutParams(int,int)
-    1257:1291:public SlidingPaneLayout$LayoutParams(android.support.v4.widget.SlidingPaneLayout$LayoutParams)
+    1277:1278:public SlidingPaneLayout$LayoutParams(int,int)
+    1289:1291:public SlidingPaneLayout$LayoutParams(android.support.v4.widget.SlidingPaneLayout$LayoutParams)
 android.support.v4.widget.SlidingPaneLayout$SimplePanelSlideListener
 android.support.v4.widget.ViewDragHelper:
     private static final java.lang.String TAG
@@ -1462,43 +1462,7 @@ com.givon.huf.util.StringUtil:
     77:91:public static boolean isNetworkAvailable(android.content.Context)
     94:101:public static java.lang.String getFileName(java.lang.String)
     108:113:public static java.lang.String double2String(double)
-com.givon.huf.util.TimeToUtil:
-    public static final int SECOND
-    public static final int MINUTE
-    public static final int HOUR
-    public static final int DAY
-    public static final java.lang.String ACCURATE_TO_THE_TIME
-    public static final java.lang.String ACCURATE_TO_THE_TIME_HOUS
-    public static final java.lang.String ACCURATE_TO_THE_DAY
-    public static final java.lang.String ACCURATE_TO_THE_WEEK
-    public static final java.lang.String ACCURATE_TO_THE_DAYANDTIME
-    public static final java.lang.String ACCURATE_TO_THE_STRINGS
-    public static final java.lang.String ACCURATE_TO_THE_WEEK_DAY
-    public static final java.lang.String ACCURATE_TO_THE_WEEK_DAY_A
-    63:63:public int[] getFields()
-    81:82:public TimeToUtil(int,int)
-    94:95:public TimeToUtil(int,int,int)
-    104:105:public TimeToUtil(java.lang.String)
-    45:133:public TimeToUtil(java.lang.String,java.lang.String)
-    175:182:public com.givon.huf.util.TimeToUtil addTime(com.givon.huf.util.TimeToUtil)
-    192:206:public com.givon.huf.util.TimeToUtil subtractTime(com.givon.huf.util.TimeToUtil)
-    214:214:public java.lang.String getTimeToUtileparator()
-    223:224:public void setTimeToUtileparator(java.lang.String)
-    234:247:private void parseTime(java.lang.String)
-    250:266:private void parseTimeField(java.lang.String,java.lang.String,int)
-    269:270:private void parseTimeException(java.lang.String)
-    311:335:public static java.lang.String getCountDown(long)
-    339:347:public static int[] getTime(int)
-    370:372:public static java.lang.String getSystemTimeFormat(long)
-    376:378:public static java.lang.String getSystemTimeAFormat(long)
-    382:384:public static java.lang.String getSystemDayFormat()
-    389:391:public static java.lang.String getSystemTimeFormatWeek()
-    396:398:public static java.lang.String getSystemTimeFormatWeek(long)
-    402:404:public static java.lang.String getSystemTimeFormatWeekA(long)
-    409:411:public static java.lang.String getSystemTimeSetFormat(long,java.lang.String)
-    415:432:public static java.lang.String getFormat(long)
-    437:439:public static java.lang.String getSystemTimeSetFormat(java.lang.String)
-    450:459:public static long convert2long(java.lang.String)
+com.givon.huf.util.TimeToUtil
 com.givon.huf.util.ToastUtil:
     18:18:public ToastUtil()
     21:25:public static void showMessage(int)
